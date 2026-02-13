@@ -247,6 +247,28 @@
         return (text || '').trim().replace(/\s*\d+[smh]$/, '').trim();
     };
 
+    // Helper to click the "Scroll to bottom" button before scanning for accept buttons.
+    // This ensures all accept/run/retry buttons below the visible area are revealed.
+    async function scrollToBottom() {
+        const scrollButtons = queryAll('button[aria-label="Scroll to bottom"]');
+        let clicked = 0;
+        for (const btn of scrollButtons) {
+            try {
+                const style = window.getComputedStyle(btn);
+                const rect = btn.getBoundingClientRect();
+                if (style.display !== 'none' && rect.width > 0 && style.pointerEvents !== 'none') {
+                    btn.dispatchEvent(new MouseEvent('click', { view: window, bubbles: true, cancelable: true }));
+                    clicked++;
+                }
+            } catch (e) { }
+        }
+        if (clicked > 0) {
+            log(`[Scroll] Clicked ${clicked} scroll-to-bottom button(s)`);
+            // Wait for scroll animation to complete before scanning for buttons
+            await new Promise(r => setTimeout(r, 300));
+        }
+    }
+
     // Helper to deduplicate tab names by appending (2), (3), etc.
     const deduplicateNames = (names) => {
         const counts = {};
@@ -755,6 +777,9 @@
             cycle++;
             log(`[Loop] Cycle ${cycle}: Starting...`);
 
+            // Scroll to bottom first to reveal any hidden accept buttons
+            await scrollToBottom();
+
             const clicked = await performClick(['button', '[class*="button"]', '[class*="anysphere"]']);
             log(`[Loop] Cycle ${cycle}: Clicked ${clicked} buttons`);
 
@@ -809,6 +834,9 @@
         while (window.__autoAcceptState.isRunning && window.__autoAcceptState.sessionID === sid) {
             cycle++;
             log(`[Loop] Cycle ${cycle}: Starting...`);
+
+            // Scroll to bottom first to reveal any hidden accept buttons
+            await scrollToBottom();
 
             // FIRST: Check for completion badges (Good/Bad) BEFORE clicking
             const allSpans = queryAll('span');
@@ -987,6 +1015,8 @@
                 log(`Starting static poll loop...`);
                 (async function staticLoop() {
                     while (state.isRunning && state.sessionID === sid) {
+                        // Scroll to bottom first to reveal any hidden accept buttons
+                        await scrollToBottom();
                         performClick(['button', '[class*="button"]', '[class*="anysphere"]']);
                         await new Promise(r => setTimeout(r, config.pollInterval || 1000));
                     }
