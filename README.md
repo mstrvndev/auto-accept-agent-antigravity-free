@@ -1,6 +1,6 @@
 # 🚀 Auto Accept Agent — Free Edition
 
-[![Version](https://img.shields.io/badge/version-8.8.7-blue?style=for-the-badge)](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
+[![Version](https://img.shields.io/badge/version-8.9.0-blue?style=for-the-badge)](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
 [![VS Code](https://img.shields.io/badge/VS%20Code-%3E%3D1.75.0-007ACC?style=for-the-badge&logo=visual-studio-code)](https://code.visualstudio.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Downloads](https://img.shields.io/github/downloads/mstrvndev/auto-accept-agent-antigravity-free/total?style=for-the-badge&color=orange)](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
@@ -32,7 +32,7 @@ Auto Accept Agent is a powerful **VS Code / Cursor / Antigravity extension** tha
 ### Option 1 — Pre-built VSIX (Recommended)
 
 1. Go to the [**Releases**](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases) page.
-2. Download the latest **`auto-accept-agent-8.8.7.vsix`** file.
+2. Download the latest **`auto-accept-agent-8.9.0.vsix`** file.
 3. In VS Code / Cursor / Antigravity, open the Command Palette (`Ctrl+Shift+P`).
 4. Run **`Extensions: Install from VSIX...`** and select the downloaded file.
 
@@ -154,4 +154,5 @@ If Auto Accept Agent saves you time, please give it a ⭐ on GitHub — it helps
 ---
 
 **Keywords**: auto accept agent, cursor auto accept, antigravity auto accept, vscode auto accept, ai agent automation, cursor extension, antigravity extension, auto accept vsix, free auto accept, coding agent automation, ai coding assistant, cursor ai, antigravity tools, vscode extension, auto approve agent, hands-free coding, ai workflow automation
+
 
