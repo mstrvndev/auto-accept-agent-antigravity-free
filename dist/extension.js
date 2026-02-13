@@ -150,7 +150,7 @@ var require_settings_panel = __commonJS({
                   "Contact Support"
                 ).then((selection) => {
                   if (selection === "Contact Support") {
-                    vscode2.env.openExternal(vscode2.Uri.parse("https://github.com/MunKhin/auto-accept-agent/issues"));
+                    vscode2.env.openExternal(vscode2.Uri.parse("https://github.com/mstrvndev/auto-accept-agent-antigravity-free/issues"));
                   }
                 });
               }
@@ -4654,7 +4654,7 @@ var require_setup_panel = __commonJS({
                 vscode2.window.showInformationMessage("\u2705 Script copied to clipboard!");
                 return;
               case "openHelp":
-                vscode2.env.openExternal(vscode2.Uri.parse("https://github.com/MunKhin/auto-accept-agent/blob/master/SETUP_GUIDE.md"));
+                vscode2.env.openExternal(vscode2.Uri.parse("https://github.com/mstrvndev/auto-accept-agent-antigravity-free/blob/master/SETUP_GUIDE.md"));
                 return;
             }
           },
@@ -4987,14 +4987,14 @@ var require_relauncher = __commonJS({
             "View Help"
           ).then((selection) => {
             if (selection === "View Help") {
-              vscode2.env.openExternal(vscode2.Uri.parse("https://github.com/MunKhin/auto-accept-agent/blob/master/SETUP_GUIDE.md"));
+              vscode2.env.openExternal(vscode2.Uri.parse("https://github.com/mstrvndev/auto-accept-agent-antigravity-free/blob/master/SETUP_GUIDE.md"));
             }
           });
           return { success: false, relaunched: false };
         }
         try {
           const { SetupPanel } = require_setup_panel();
-          const extensionPath = vscode2.extensions.getExtension("MunKhin.auto-accept-agent")?.extensionUri;
+          const extensionPath = vscode2.extensions.getExtension("mstrvn.auto-accept-mstrvn")?.extensionUri;
           if (extensionPath) {
             SetupPanel.createOrShow(extensionPath, script, this.platform, ideName);
           } else {
@@ -5031,7 +5031,7 @@ var require_relauncher = __commonJS({
           const terminalName = this.platform === "win32" ? "PowerShell (as Administrator)" : "Terminal";
           vscode2.window.showInformationMessage(`Script copied! Please paste and run it in ${terminalName}, then restart ${ideName}.`);
         } else if (selection === viewHelpButton) {
-          vscode2.env.openExternal(vscode2.Uri.parse("https://github.com/Antigravity-AI/auto-accept#background-mode-setup"));
+          vscode2.env.openExternal(vscode2.Uri.parse("https://github.com/mstrvndev/auto-accept-agent-antigravity-free#background-mode-setup"));
         }
       }
       /**

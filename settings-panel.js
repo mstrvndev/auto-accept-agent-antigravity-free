@@ -155,7 +155,7 @@ class SettingsPanel {
                             'Contact Support'
                         ).then(selection => {
                             if (selection === 'Contact Support') {
-                                vscode.env.openExternal(vscode.Uri.parse('https://github.com/MunKhin/auto-accept-agent/issues'));
+                                vscode.env.openExternal(vscode.Uri.parse('https://github.com/mstrvndev/auto-accept-agent-antigravity-free/issues'));
                             }
                         });
                     }
@@ -839,3 +839,4 @@ class SettingsPanel {
 }
 
 module.exports = { SettingsPanel };
+

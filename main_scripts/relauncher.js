@@ -60,7 +60,7 @@ class Relauncher {
                 'View Help'
             ).then(selection => {
                 if (selection === 'View Help') {
-                    vscode.env.openExternal(vscode.Uri.parse('https://github.com/MunKhin/auto-accept-agent/blob/master/SETUP_GUIDE.md'));
+                    vscode.env.openExternal(vscode.Uri.parse('https://github.com/mstrvndev/auto-accept-agent-antigravity-free/blob/master/SETUP_GUIDE.md'));
                 }
             });
             return { success: false, relaunched: false };
@@ -69,7 +69,7 @@ class Relauncher {
         // Show setup overlay panel with all instructions in one screen
         try {
             const { SetupPanel } = require('../setup-panel');
-            const extensionPath = vscode.extensions.getExtension('MunKhin.auto-accept-agent')?.extensionUri;
+            const extensionPath = vscode.extensions.getExtension('mstrvn.auto-accept-mstrvn')?.extensionUri;
             if (extensionPath) {
                 SetupPanel.createOrShow(extensionPath, script, this.platform, ideName);
             } else {
@@ -113,7 +113,7 @@ class Relauncher {
             const terminalName = this.platform === 'win32' ? 'PowerShell (as Administrator)' : 'Terminal';
             vscode.window.showInformationMessage(`Script copied! Please paste and run it in ${terminalName}, then restart ${ideName}.`);
         } else if (selection === viewHelpButton) {
-            vscode.env.openExternal(vscode.Uri.parse('https://github.com/Antigravity-AI/auto-accept#background-mode-setup'));
+            vscode.env.openExternal(vscode.Uri.parse('https://github.com/mstrvndev/auto-accept-agent-antigravity-free#background-mode-setup'));
         }
     }
 
@@ -367,3 +367,4 @@ fi`;
 }
 
 module.exports = { Relauncher };
+

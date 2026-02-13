@@ -1,13 +1,13 @@
-# 🚀 Auto Accept Agent — Free Edition
+# 🚀 AUTO-ACCEPT-MSTRVN — Free Edition
 
-[![Version](https://img.shields.io/badge/version-8.9.0-blue?style=for-the-badge)](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge)](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
 [![VS Code](https://img.shields.io/badge/VS%20Code-%3E%3D1.75.0-007ACC?style=for-the-badge&logo=visual-studio-code)](https://code.visualstudio.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Downloads](https://img.shields.io/github/downloads/mstrvndev/auto-accept-agent-antigravity-free/total?style=for-the-badge&color=orange)](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
 
 > **Automatically accept AI agent suggestions in Cursor, Antigravity & VS Code — hands-free coding at lightning speed.**
 
-Auto Accept Agent is a powerful **VS Code / Cursor / Antigravity extension** that automates the "Accept" workflow when working with AI coding agents. Stop clicking manually — let the agent run autonomously while you focus on what matters.
+AUTO-ACCEPT-MSTRVN is a powerful **VS Code / Cursor / Antigravity extension** that automates the "Accept" workflow when working with AI coding agents. Stop clicking manually — let the agent run autonomously while you focus on what matters.
 
 ---
 
@@ -24,6 +24,8 @@ Auto Accept Agent is a powerful **VS Code / Cursor / Antigravity extension** tha
 | 📊 **Analytics Dashboard** | ✅ | ✅ |
 | 🔁 **Auto-Relauncher** | ✅ | ✅ |
 | 🌐 **Multi-IDE Support** (Cursor, Antigravity, VS Code) | ✅ | ✅ |
+| 🔽 **Auto Scroll-to-Bottom** | ✅ | ✅ |
+| ✅ **"Always Allow" Auto-Accept** | ✅ | ✅ |
 
 ---
 
@@ -32,7 +34,7 @@ Auto Accept Agent is a powerful **VS Code / Cursor / Antigravity extension** tha
 ### Option 1 — Pre-built VSIX (Recommended)
 
 1. Go to the [**Releases**](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases) page.
-2. Download the latest **`auto-accept-agent-8.9.0.vsix`** file.
+2. Download the latest **`auto-accept-mstrvn-1.0.0.vsix`** file.
 3. In VS Code / Cursor / Antigravity, open the Command Palette (`Ctrl+Shift+P`).
 4. Run **`Extensions: Install from VSIX...`** and select the downloaded file.
 
@@ -68,7 +70,7 @@ Then install the extension folder in your IDE via `Extensions: Install from VSIX
 
 ## 🛡️ Safety — Dangerous Command Blocking
 
-Auto Accept Agent ships with a built-in blocklist of dangerous terminal commands to keep you safe:
+AUTO-ACCEPT-MSTRVN ships with a built-in blocklist of dangerous terminal commands to keep you safe:
 
 - `rm -rf /`, `rm -rf ~`, `rm -rf *`
 - `format c:`, `del /f /s /q`, `rmdir /s /q`
@@ -81,7 +83,7 @@ You can customize this list in the settings panel.
 ## 🏗️ Architecture
 
 ```
-auto-accept-agent/
+auto-accept-mstrvn/
 ├── extension.js          # Main VS Code extension entry
 ├── config.js             # Configuration
 ├── settings-panel.js     # Settings webview UI
@@ -112,6 +114,7 @@ auto-accept-agent/
 3. **Polling Loop** — Watches for AI agent "Accept" buttons at configurable intervals.
 4. **Safe Execution** — Checks every pending command against the blocklist before accepting.
 5. **Auto Recovery** — If the connection drops, the relauncher module reconnects automatically.
+6. **Scroll-to-Bottom** — Automatically scrolls chat panels to reveal hidden accept buttons.
 
 ---
 
@@ -137,11 +140,13 @@ auto-accept-agent/
 
 This project is licensed under the [MIT License](LICENSE).
 
+Copyright (c) 2026 [mstrvn.dev](https://github.com/mstrvndev)
+
 ---
 
 ## ⭐ Star This Repo
 
-If Auto Accept Agent saves you time, please give it a ⭐ on GitHub — it helps others discover this tool!
+If AUTO-ACCEPT-MSTRVN saves you time, please give it a ⭐ on GitHub — it helps others discover this tool!
 
 ---
 
@@ -153,6 +158,4 @@ If Auto Accept Agent saves you time, please give it a ⭐ on GitHub — it helps
 
 ---
 
-**Keywords**: auto accept agent, cursor auto accept, antigravity auto accept, vscode auto accept, ai agent automation, cursor extension, antigravity extension, auto accept vsix, free auto accept, coding agent automation, ai coding assistant, cursor ai, antigravity tools, vscode extension, auto approve agent, hands-free coding, ai workflow automation
-
-
+**Keywords**: auto accept mstrvn, auto accept agent, cursor auto accept, antigravity auto accept, vscode auto accept, ai agent automation, cursor extension, antigravity extension, auto accept vsix, free auto accept, coding agent automation, ai coding assistant, cursor ai, antigravity tools, vscode extension, auto approve agent, hands-free coding, ai workflow automation, mstrvn dev, auto-accept-mstrvn

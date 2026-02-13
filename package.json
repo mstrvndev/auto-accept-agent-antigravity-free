@@ -1,13 +1,13 @@
 {
-    "name": "auto-accept-agent",
-    "displayName": "Auto Accept Agent",
-    "description": "Auto Accept Agent: Automated Cursor and Antigravity workflow with Pro recovery tools.",
-    "version": "8.9.0",
-    "publisher": "MunKhin",
+    "name": "auto-accept-mstrvn",
+    "displayName": "AUTO-ACCEPT-MSTRVN",
+    "description": "AUTO-ACCEPT-MSTRVN: Automated AI agent accept workflow for Cursor, Antigravity and VS Code.",
+    "version": "1.0.0",
+    "publisher": "mstrvn",
     "icon": "media/icon.png",
     "repository": {
         "type": "git",
-        "url": "https://github.com/MunKhin/auto-accept-agent"
+        "url": "https://github.com/mstrvndev/auto-accept-agent-antigravity-free"
     },
     "categories": [
         "Machine Learning",
