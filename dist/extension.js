@@ -4298,6 +4298,58 @@ var require_relauncher = __commonJS({
         return "Code";
       }
       /**
+       * Fully quit and relaunch the IDE so the new CDP shortcut args take effect.
+       * workbench.action.reloadWindow does NOT work because it reloads the same process
+       * with the same args — the new --remote-debugging-port=9000 flag is only on the shortcut.
+       */
+      async fullRestartIDE(ideName) {
+        this.log("Performing full IDE restart (quit + relaunch)...");
+        if (this.platform === "win32") {
+          const exePaths = [
+            path2.join(process.env.LOCALAPPDATA || "", "Programs", ideName, `${ideName}.exe`),
+            process.argv[0]
+            // fallback to current executable
+          ];
+          let exePath = "";
+          for (const p of exePaths) {
+            if (p && fs.existsSync(p)) {
+              exePath = p;
+              break;
+            }
+          }
+          if (exePath) {
+            this.log(`Relaunching from: ${exePath}`);
+            spawn(exePath, ["--remote-debugging-port=9000"], {
+              detached: true,
+              stdio: "ignore"
+            }).unref();
+          }
+          setTimeout(() => {
+            vscode2.commands.executeCommand("workbench.action.quit");
+          }, 1500);
+        } else if (this.platform === "darwin") {
+          const appName = ideName;
+          spawn("bash", ["-c", `sleep 2 && open -a "${appName}" --args --remote-debugging-port=9000`], {
+            detached: true,
+            stdio: "ignore"
+          }).unref();
+          setTimeout(() => {
+            vscode2.commands.executeCommand("workbench.action.quit");
+          }, 1e3);
+        } else {
+          const exePath = process.argv[0];
+          if (exePath && fs.existsSync(exePath)) {
+            spawn(exePath, ["--remote-debugging-port=9000"], {
+              detached: true,
+              stdio: "ignore"
+            }).unref();
+          }
+          setTimeout(() => {
+            vscode2.commands.executeCommand("workbench.action.quit");
+          }, 1500);
+        }
+      }
+      /**
        * Main entry point: ensures CDP is enabled and relaunches if necessary
        * Runs the setup script AUTOMATICALLY — no manual steps required
        */
@@ -4306,13 +4358,13 @@ var require_relauncher = __commonJS({
         const hasFlag = await this.checkShortcutFlag();
         const ideName = this.getIdeName();
         if (hasFlag) {
-          this.log("CDP flag present but port inactive. Prompting for restart.");
+          this.log("CDP flag present but port inactive. Prompting for full restart.");
           vscode2.window.showWarningMessage(
-            `Auto Accept: The CDP flag is present, but the debugger port is not responding. Please completely close and restart ${ideName}.`,
+            `Auto Accept: The CDP flag is present, but the debugger port is not responding. ${ideName} will fully close and relaunch.`,
             "Restart Now"
           ).then((selection) => {
             if (selection === "Restart Now") {
-              vscode2.commands.executeCommand("workbench.action.reloadWindow");
+              this.fullRestartIDE(ideName);
             }
           });
           return { success: true, relaunched: false };
@@ -4466,12 +4518,12 @@ exit 0
           }
         );
         const choice = await vscode2.window.showInformationMessage(
-          `\u2705 CDP setup complete! Please restart ${ideName} for changes to take effect.`,
+          `\u2705 CDP setup complete! ${ideName} needs to fully close and relaunch for changes to take effect.`,
           "Restart Now",
           "Later"
         );
         if (choice === "Restart Now") {
-          vscode2.commands.executeCommand("workbench.action.reloadWindow");
+          await this.fullRestartIDE(ideName);
         }
       }
       /**
@@ -4591,12 +4643,12 @@ exit 0
           }
         );
         const choice = await vscode2.window.showInformationMessage(
-          `\u2705 CDP setup complete! Please restart ${ideName} for changes to take effect.`,
+          `\u2705 CDP setup complete! ${ideName} needs to fully close and relaunch for changes to take effect.`,
           "Restart Now",
           "Later"
         );
         if (choice === "Restart Now") {
-          vscode2.commands.executeCommand("workbench.action.reloadWindow");
+          await this.fullRestartIDE(ideName);
         }
       }
       /**
@@ -4671,12 +4723,12 @@ exit 0
           }
         );
         const choice = await vscode2.window.showInformationMessage(
-          `\u2705 CDP setup complete! Please restart ${ideName} for changes to take effect.`,
+          `\u2705 CDP setup complete! ${ideName} needs to fully close and relaunch for changes to take effect.`,
           "Restart Now",
           "Later"
         );
         if (choice === "Restart Now") {
-          vscode2.commands.executeCommand("workbench.action.reloadWindow");
+          await this.fullRestartIDE(ideName);
         }
       }
       /**
