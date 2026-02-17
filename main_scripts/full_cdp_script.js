@@ -156,9 +156,7 @@
                     sessionID: 0,
                     currentMode: null,
                     startTimes: {},
-                    bannedCommands: [],
-                    isPro: false,
-                    stats: createDefaultStats()
+                    bannedCommands: [],                    stats: createDefaultStats()
                 };
                 log('[Analytics] State initialized');
             } else if (!window.__autoAcceptState.stats) {
@@ -962,7 +960,6 @@
     window.__autoAcceptStart = function (config) {
         try {
             const ide = (config.ide || 'cursor').toLowerCase();
-            const isPro = config.isPro !== false;
             const isBG = config.isBackgroundMode === true;
 
             // Update banned commands from config
@@ -970,7 +967,7 @@
                 window.__autoAcceptUpdateBannedCommands(config.bannedCommands);
             }
 
-            log(`__autoAcceptStart called: ide=${ide}, isPro=${isPro}, isBG=${isBG}`);
+            log(`__autoAcceptStart called: ide=${ide}, isBG=${isBG}`);
 
             const state = window.__autoAcceptState;
 
@@ -997,17 +994,12 @@
                 state.stats.sessionStartTime = Date.now();
             }
 
-            log(`Agent Loaded (IDE: ${ide}, BG: ${isBG}, isPro: ${isPro})`, true);
+            log(`Agent Loaded (IDE: ${ide}, BG: ${isBG})`, true);
 
-            if (isBG && isPro) {
+            if (isBG) {
                 log(`[BG] Creating overlay and starting loop...`);
                 showOverlay();
                 log(`[BG] Overlay created, starting ${ide} loop...`);
-                if (ide === 'cursor') cursorLoop(sid);
-                else antigravityLoop(sid);
-            } else if (isBG && !isPro) {
-                log(`[BG] Background mode requires Pro, showing overlay anyway...`);
-                showOverlay();
                 if (ide === 'cursor') cursorLoop(sid);
                 else antigravityLoop(sid);
             } else {

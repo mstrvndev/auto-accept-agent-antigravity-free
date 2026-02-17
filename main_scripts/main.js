@@ -11,7 +11,7 @@ window.__autoAcceptState = window.__autoAcceptState || {
 
 window.__autoAcceptStart = function (config) {
     // Check if we need to restart due to mode change
-    const newMode = (config.isBackgroundMode && config.isPro) ? 'background' : 'simple';
+    const newMode = config.isBackgroundMode ? 'background' : 'simple';
     if (window.__autoAcceptState.isRunning && window.__autoAcceptState.currentMode === newMode) {
         return; // Already running in the correct mode
     }

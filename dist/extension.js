@@ -71,8 +71,7 @@ var require_settings_panel = __commonJS({
         this.panel.webview.postMessage({
           command: "updateStats",
           stats,
-          frequency,
-          isPro: true
+          frequency
         });
       }
       async sendROIStats() {
@@ -4719,7 +4718,9 @@ var bannedCommands = [];
 var backgroundModeEnabled = false;
 var BACKGROUND_DONT_SHOW_KEY = "auto-accept-background-dont-show";
 var BACKGROUND_MODE_KEY = "auto-accept-background-mode";
-var VERSION_NOTIFICATION_KEY = "auto-accept-version-1.0-mstrvn-shown";
+var LAST_UPDATE_CHECK_KEY = "auto-accept-last-update-check";
+var DISMISSED_VERSION_KEY = "auto-accept-dismissed-version";
+var CURRENT_VERSION = "1.0.0";
 var pollTimer;
 var statsCollectionTimer;
 var statusBarItem;
@@ -4838,7 +4839,7 @@ async function activate(context) {
     } catch (err) {
       log(`Error in environment check: ${err.message}`);
     }
-    showVersionNotification(context);
+    checkForUpdates(context);
     log("Auto Accept: Activation complete");
   } catch (error) {
     console.error("ACTIVATION CRITICAL FAILURE:", error);
@@ -4985,8 +4986,6 @@ async function syncSessions() {
     log(`CDP: Syncing sessions (Mode: ${backgroundModeEnabled ? "Background" : "Simple"})...`);
     try {
       await cdpHandler.start({
-        isPro: true,
-        // All features unlocked
         isBackgroundMode: backgroundModeEnabled,
         pollInterval: pollFrequency,
         ide: currentIDE,
@@ -5236,31 +5235,73 @@ function updateStatusBar() {
     }
   }
 }
-async function showVersionNotification(context) {
-  const hasShown = context.globalState.get(VERSION_NOTIFICATION_KEY, false);
-  if (hasShown) return;
-  const title = "\u{1F680} AUTO-ACCEPT-MSTRVN v1.0.0";
-  const body = `All features unlocked. Free forever.
-
-\u2705 Auto-accept all AI agent actions
-\u{1F504} Background Mode \u2014 handle all chats in parallel
-\u26A1 Adjustable poll frequency (200ms ultra-low latency)
-\u{1F6E1}\uFE0F Safety Rules \u2014 block dangerous commands
-\u{1F4CA} Impact Dashboard \u2014 track time saved
-\u{1F527} Automatic CDP setup \u2014 no manual scripts needed`;
-  await context.globalState.update(VERSION_NOTIFICATION_KEY, true);
-  const selection = await vscode.window.showInformationMessage(
-    `${title}
-
-${body}`,
-    { modal: true },
-    "Got it",
-    "View Dashboard"
-  );
-  if (selection === "View Dashboard") {
-    const panel = getSettingsPanel();
-    if (panel) panel.createOrShow(context.extensionUri, context);
+async function checkForUpdates(context) {
+  try {
+    const lastCheck = context.globalState.get(LAST_UPDATE_CHECK_KEY, 0);
+    const SIX_HOURS = 6 * 60 * 60 * 1e3;
+    if (Date.now() - lastCheck < SIX_HOURS) return;
+    await context.globalState.update(LAST_UPDATE_CHECK_KEY, Date.now());
+    const https = require("https");
+    const releaseData = await new Promise((resolve, reject) => {
+      const options = {
+        hostname: "api.github.com",
+        path: "/repos/mstrvndev/auto-accept-agent-antigravity-free/releases/latest",
+        headers: { "User-Agent": "auto-accept-mstrvn" }
+      };
+      https.get(options, (res) => {
+        let data = "";
+        res.on("data", (chunk) => {
+          data += chunk;
+        });
+        res.on("end", () => {
+          try {
+            resolve(JSON.parse(data));
+          } catch (e) {
+            reject(e);
+          }
+        });
+      }).on("error", reject);
+    });
+    if (!releaseData || !releaseData.tag_name) return;
+    const latestTag = releaseData.tag_name.replace(/^v/, "");
+    const dismissedVersion = context.globalState.get(DISMISSED_VERSION_KEY, "");
+    if (compareVersions(latestTag, CURRENT_VERSION) > 0 && latestTag !== dismissedVersion) {
+      const releaseName = releaseData.name || `v${latestTag}`;
+      const releaseUrl = releaseData.html_url || "https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases";
+      let vsixUrl = releaseUrl;
+      if (releaseData.assets && releaseData.assets.length > 0) {
+        const vsixAsset = releaseData.assets.find((a) => a.name && a.name.endsWith(".vsix"));
+        if (vsixAsset) vsixUrl = vsixAsset.browser_download_url;
+      }
+      const body = releaseData.body ? releaseData.body.substring(0, 200) : "";
+      const selection = await vscode.window.showInformationMessage(
+        `\u{1F680} AUTO-ACCEPT-MSTRVN update available: ${releaseName}${body ? " \u2014 " + body : ""}`,
+        "Download Update",
+        "View Release",
+        "Dismiss"
+      );
+      if (selection === "Download Update") {
+        vscode.env.openExternal(vscode.Uri.parse(vsixUrl));
+      } else if (selection === "View Release") {
+        vscode.env.openExternal(vscode.Uri.parse(releaseUrl));
+      } else if (selection === "Dismiss") {
+        await context.globalState.update(DISMISSED_VERSION_KEY, latestTag);
+      }
+    }
+    log(`Update check complete. Current: ${CURRENT_VERSION}, Latest: ${latestTag}`);
+  } catch (err) {
+    log(`Update check failed (non-critical): ${err.message}`);
   }
+}
+function compareVersions(a, b) {
+  const pa = a.split(".").map(Number);
+  const pb = b.split(".").map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const na = pa[i] || 0;
+    const nb = pb[i] || 0;
+    if (na !== nb) return na - nb;
+  }
+  return 0;
 }
 function deactivate() {
   stopPolling();

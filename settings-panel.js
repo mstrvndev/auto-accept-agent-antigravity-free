@@ -76,8 +76,7 @@ class SettingsPanel {
         this.panel.webview.postMessage({
             command: 'updateStats',
             stats,
-            frequency,
-            isPro: true
+            frequency
         });
     }
 
