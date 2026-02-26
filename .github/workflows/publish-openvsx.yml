@@ -3,6 +3,11 @@ name: Publish to Open VSX
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '*.md'
+      - 'enable_antigravity_debug.ps1'
+      - 'LICENSE'
+      - 'media/**'
 
 jobs:
   publish:
@@ -25,3 +30,4 @@ jobs:
 
       - name: Publish to Open VSX
         run: npx ovsx publish extension.vsix -p ${{ secrets.OVSX_PAT }}
+        continue-on-error: false

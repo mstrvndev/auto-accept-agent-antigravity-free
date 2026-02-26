@@ -2,7 +2,7 @@
     "name": "auto-accept-mstrvn",
     "displayName": "AUTO-ACCEPT-MSTRVN",
     "description": "AUTO-ACCEPT-MSTRVN: Automated AI agent accept workflow for Cursor, Antigravity and VS Code.",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "publisher": "mstrvn",
     "icon": "media/icon.png",
     "repository": {
