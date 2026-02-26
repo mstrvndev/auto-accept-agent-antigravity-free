@@ -37,7 +37,7 @@ const BACKGROUND_DONT_SHOW_KEY = 'auto-accept-background-dont-show';
 const BACKGROUND_MODE_KEY = 'auto-accept-background-mode';
 const LAST_UPDATE_CHECK_KEY = 'auto-accept-last-update-check';
 const DISMISSED_VERSION_KEY = 'auto-accept-dismissed-version';
-const CURRENT_VERSION = '1.0.0';
+const CURRENT_VERSION = '1.0.1';
 
 let pollTimer;
 let statsCollectionTimer;

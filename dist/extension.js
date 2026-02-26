@@ -4710,7 +4710,7 @@ var BACKGROUND_DONT_SHOW_KEY = "auto-accept-background-dont-show";
 var BACKGROUND_MODE_KEY = "auto-accept-background-mode";
 var LAST_UPDATE_CHECK_KEY = "auto-accept-last-update-check";
 var DISMISSED_VERSION_KEY = "auto-accept-dismissed-version";
-var CURRENT_VERSION = "1.0.0";
+var CURRENT_VERSION = "1.0.1";
 var pollTimer;
 var statsCollectionTimer;
 var statusBarItem;
