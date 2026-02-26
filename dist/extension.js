@@ -4298,75 +4298,34 @@ var require_relauncher = __commonJS({
         return "Code";
       }
       /**
-       * Fully quit and relaunch the IDE so the new CDP shortcut args take effect.
-       * workbench.action.reloadWindow does NOT work because it reloads the same process
-       * with the same args — the new --remote-debugging-port=9000 flag is only on the shortcut.
+       * Show a toast notification prompting the user to manually restart the IDE.
        */
-      async fullRestartIDE(ideName) {
-        this.log("Performing full IDE restart (quit + relaunch)...");
-        if (this.platform === "win32") {
-          const exePaths = [
-            path2.join(process.env.LOCALAPPDATA || "", "Programs", ideName, `${ideName}.exe`),
-            process.argv[0]
-            // fallback to current executable
-          ];
-          let exePath = "";
-          for (const p of exePaths) {
-            if (p && fs.existsSync(p)) {
-              exePath = p;
-              break;
-            }
-          }
-          if (exePath) {
-            this.log(`Relaunching from: ${exePath}`);
-            spawn(exePath, ["--remote-debugging-port=9000"], {
-              detached: true,
-              stdio: "ignore"
-            }).unref();
-          }
-          setTimeout(() => {
-            vscode2.commands.executeCommand("workbench.action.quit");
-          }, 1500);
-        } else if (this.platform === "darwin") {
-          const appName = ideName;
-          spawn("bash", ["-c", `sleep 2 && open -a "${appName}" --args --remote-debugging-port=9000`], {
-            detached: true,
-            stdio: "ignore"
-          }).unref();
-          setTimeout(() => {
-            vscode2.commands.executeCommand("workbench.action.quit");
-          }, 1e3);
-        } else {
-          const exePath = process.argv[0];
-          if (exePath && fs.existsSync(exePath)) {
-            spawn(exePath, ["--remote-debugging-port=9000"], {
-              detached: true,
-              stdio: "ignore"
-            }).unref();
-          }
-          setTimeout(() => {
-            vscode2.commands.executeCommand("workbench.action.quit");
-          }, 1500);
-        }
+      _showRestartRequiredToast(ideName, detail) {
+        const message = `\u26A0\uFE0F ${ideName} must be restarted manually for Auto Accept to work. Please close and reopen ${ideName} using the updated shortcut.`;
+        vscode2.window.showWarningMessage(
+          detail ? `${message}
+
+${detail}` : message,
+          { modal: false },
+          "OK"
+        );
+        this.log(`Toast shown: Restart required for ${ideName}`);
       }
       /**
-       * Main entry point: ensures CDP is enabled and relaunches if necessary
-       * Runs the setup script AUTOMATICALLY — no manual steps required
+       * Main entry point: ensures CDP is enabled and prompts user to restart manually.
+       * No automatic restart — user must close and reopen the IDE themselves.
        */
       async ensureCDPAndRelaunch() {
         this.log("Checking if current process has CDP flag...");
         const hasFlag = await this.checkShortcutFlag();
         const ideName = this.getIdeName();
         if (hasFlag) {
-          this.log("CDP flag present but port inactive. Prompting for full restart.");
+          this.log("CDP flag present but port inactive. Prompting user to restart manually.");
           vscode2.window.showWarningMessage(
-            `Auto Accept: The CDP flag is present, but the debugger port is not responding. ${ideName} will fully close and relaunch.`,
-            "Restart Now"
-          ).then((selection) => {
-            if (selection === "Restart Now") {
-              this.fullRestartIDE(ideName);
-            }
-          });
+            `Auto Accept: The CDP flag is present, but the debugger port is not responding. Please close ${ideName} completely and reopen it from the shortcut.`,
+            { modal: false },
+            "OK"
+          );
           return { success: true, relaunched: false };
         }
         this.log("CDP flag missing. Running automatic CDP setup...");
@@ -4505,7 +4464,7 @@ exit 0
                   this.runElevatedPowerShell(scriptPath).then(resolve).catch(reject);
                 });
               });
-              progress.report({ increment: 50, message: "Done! Please restart." });
+              progress.report({ increment: 50, message: "Done! Please restart manually." });
             } catch (err) {
               this.log(`CDP setup error: ${err.message}`);
               throw err;
@@ -4517,14 +4476,7 @@ exit 0
             }
           }
         );
-        const choice = await vscode2.window.showInformationMessage(
-          `\u2705 CDP setup complete! ${ideName} needs to fully close and relaunch for changes to take effect.`,
-          "Restart Now",
-          "Later"
-        );
-        if (choice === "Restart Now") {
-          await this.fullRestartIDE(ideName);
-        }
+        this._showRestartRequiredToast(ideName, "Shortcuts have been updated with --remote-debugging-port=9000.");
       }
       /**
        * Run PowerShell with elevation (Start-Process -Verb RunAs)
@@ -4642,14 +4594,7 @@ exit 0
             }
           }
         );
-        const choice = await vscode2.window.showInformationMessage(
-          `\u2705 CDP setup complete! ${ideName} needs to fully close and relaunch for changes to take effect.`,
-          "Restart Now",
-          "Later"
-        );
-        if (choice === "Restart Now") {
-          await this.fullRestartIDE(ideName);
-        }
+        this._showRestartRequiredToast(ideName, "Info.plist has been updated with --remote-debugging-port=9000.");
       }
       /**
        * Linux: Run bash script automatically
@@ -4722,14 +4667,7 @@ exit 0
             }
           }
         );
-        const choice = await vscode2.window.showInformationMessage(
-          `\u2705 CDP setup complete! ${ideName} needs to fully close and relaunch for changes to take effect.`,
-          "Restart Now",
-          "Later"
-        );
-        if (choice === "Restart Now") {
-          await this.fullRestartIDE(ideName);
-        }
+        this._showRestartRequiredToast(ideName, ".desktop files have been updated with --remote-debugging-port=9000.");
       }
       /**
        * Check if the current launch has the CDP flag
