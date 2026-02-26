@@ -1,6 +1,7 @@
 # 🚀 AUTO-ACCEPT-MSTRVN — Free Edition
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge)](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
+[![Version](https://img.shields.io/badge/version-1.0.1-blue?style=for-the-badge)](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
+[![Open VSX](https://img.shields.io/open-vsx/v/mstrvn/auto-accept-mstrvn?style=for-the-badge&label=Open%20VSX&color=purple)](https://open-vsx.org/extension/mstrvn/auto-accept-mstrvn)
 [![VS Code](https://img.shields.io/badge/VS%20Code-%3E%3D1.75.0-007ACC?style=for-the-badge&logo=visual-studio-code)](https://code.visualstudio.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Downloads](https://img.shields.io/github/downloads/mstrvndev/auto-accept-agent-antigravity-free/total?style=for-the-badge&color=orange)](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
@@ -22,7 +23,7 @@ AUTO-ACCEPT-MSTRVN is a powerful **VS Code / Cursor / Antigravity extension** th
 | 🛡️ **Dangerous Command Blocking** | ✅ | ✅ |
 | 🖥️ **CDP-Based Browser Control** | ✅ | ✅ |
 | 📊 **Analytics Dashboard** | ✅ | ✅ |
-| 🔁 **Auto-Relauncher** | ✅ | ✅ |
+| 🔧 **Automatic CDP Setup** | ✅ | ✅ |
 | 🌐 **Multi-IDE Support** (Cursor, Antigravity, VS Code) | ✅ | ✅ |
 | 🔽 **Auto Scroll-to-Bottom** | ✅ | ✅ |
 | ✅ **"Always Allow" Auto-Accept** | ✅ | ✅ |
@@ -31,23 +32,32 @@ AUTO-ACCEPT-MSTRVN is a powerful **VS Code / Cursor / Antigravity extension** th
 
 ## 📦 Installation
 
-### Option 1 — Pre-built VSIX (Recommended)
+### Option 1 — Open VSX Registry (Recommended for Antigravity)
+
+1. Open your IDE's Extensions panel.
+2. Search for **`auto-accept-mstrvn`**.
+3. Click **Install**.
+
+Or install directly from: **[open-vsx.org/extension/mstrvn/auto-accept-mstrvn](https://open-vsx.org/extension/mstrvn/auto-accept-mstrvn)**
+
+### Option 2 — Pre-built VSIX
 
 1. Go to the [**Releases**](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases) page.
-2. Download the latest **`auto-accept-mstrvn-1.0.0.vsix`** file.
+2. Download the latest **`.vsix`** file.
 3. In VS Code / Cursor / Antigravity, open the Command Palette (`Ctrl+Shift+P`).
 4. Run **`Extensions: Install from VSIX...`** and select the downloaded file.
 
-### Option 2 — From Source
+### Option 3 — From Source
 
 ```bash
 git clone https://github.com/mstrvndev/auto-accept-agent-antigravity-free.git
 cd auto-accept-agent-antigravity-free
 npm install
 npm run compile
+npx vsce package
 ```
 
-Then install the extension folder in your IDE via `Extensions: Install from VSIX` or load it as a development extension.
+Then install the generated `.vsix` via `Extensions: Install from VSIX...`.
 
 ---
 
@@ -56,7 +66,11 @@ Then install the extension folder in your IDE via `Extensions: Install from VSIX
 1. **Install** the extension (see above).
 2. Look for **`Auto Accept`** in the status bar (bottom-right).
 3. **Click** the status bar item or run `Auto Accept: Toggle ON/OFF` from the Command Palette.
-4. The agent will now **automatically accept** AI suggestions as they appear.
+4. **First time only:** The extension will automatically configure your IDE shortcuts with the required `--remote-debugging-port=9000` flag and show a toast notification.
+5. **Restart your IDE manually** by closing and reopening it from the updated shortcut.
+6. After restart, click **Auto Accept** again — the agent will now **automatically accept** AI suggestions as they appear.
+
+> **💡 Tip:** You no longer need to run any external PowerShell script. The extension handles the CDP setup automatically on first use.
 
 ### Commands
 
@@ -64,7 +78,7 @@ Then install the extension folder in your IDE via `Extensions: Install from VSIX
 |---|---|
 | `Auto Accept: Toggle ON/OFF` | Enable or disable auto-accept |
 | `Auto Accept: Toggle Background Mode` | Toggle background mode (Pro) |
-| `Auto Accept: Settings & Pro` | Open settings panel |
+| `Auto Accept: Settings` | Open settings panel |
 
 ---
 
@@ -84,25 +98,26 @@ You can customize this list in the settings panel.
 
 ```
 auto-accept-mstrvn/
-├── extension.js          # Main VS Code extension entry
-├── config.js             # Configuration
-├── settings-panel.js     # Settings webview UI
-├── setup-panel.js        # Setup wizard
-├── dist/                 # Compiled output
+├── extension.js              # Main VS Code extension entry
+├── settings-panel.js         # Settings webview UI
+├── dist/                     # Compiled output (bundled by esbuild)
 ├── main_scripts/
 │   ├── cdp-handler.js        # Chrome DevTools Protocol integration
 │   ├── auto_accept.js        # Core auto-accept logic
 │   ├── antigravity_background_poll.js  # Antigravity polling
 │   ├── full_cdp_script.js    # Full CDP injection script
-│   ├── relauncher.js         # Auto-relaunch on crash
+│   ├── relauncher.js         # CDP setup & restart prompt
 │   ├── selector_finder.js    # DOM selector detection
 │   ├── overlay.js            # UI overlay
 │   ├── simple_poll.js        # Lightweight polling fallback
 │   ├── utils.js              # Shared utilities
 │   └── analytics/            # Usage analytics modules
-└── media/
-    ├── icon.png              # Extension icon
-    └── image.png             # Promo image
+├── media/
+│   ├── icon.png              # Extension icon
+│   └── image.png             # Promo image
+└── .github/
+    └── workflows/
+        └── publish-openvsx.yml  # Auto-publish to Open VSX on push
 ```
 
 ---
@@ -110,11 +125,27 @@ auto-accept-mstrvn/
 ## 🔧 How It Works
 
 1. **IDE Detection** — Automatically detects whether you're running Cursor, Antigravity, or VS Code.
-2. **CDP Connection** — Connects to the IDE's built-in browser via the Chrome DevTools Protocol.
-3. **Polling Loop** — Watches for AI agent "Accept" buttons at configurable intervals.
-4. **Safe Execution** — Checks every pending command against the blocklist before accepting.
-5. **Auto Recovery** — If the connection drops, the relauncher module reconnects automatically.
-6. **Scroll-to-Bottom** — Automatically scrolls chat panels to reveal hidden accept buttons.
+2. **Automatic CDP Setup** — On first toggle, the extension configures your IDE shortcuts with `--remote-debugging-port=9000` and prompts you to restart manually.
+3. **CDP Connection** — After restart, connects to the IDE's built-in browser via the Chrome DevTools Protocol.
+4. **Polling Loop** — Watches for AI agent "Accept" buttons at configurable intervals.
+5. **Safe Execution** — Checks every pending command against the blocklist before accepting.
+6. **Auto Recovery** — If the connection drops, the extension reconnects automatically.
+7. **Scroll-to-Bottom** — Automatically scrolls chat panels to reveal hidden accept buttons.
+
+---
+
+## 📋 Changelog
+
+### v1.0.1
+
+- **Removed auto-restart of IDE** — The extension no longer force-quits and relaunches your IDE. Instead, it shows a toast notification prompting you to restart manually.
+- **Integrated CDP setup** — No more external PowerShell scripts needed (`enable_antigravity_debug.ps1` is now built into the extension).
+- **Published to Open VSX** — Install directly from the Open VSX Registry.
+- **CI/CD** — Added GitHub Actions workflow for automatic Open VSX publishing on every push.
+
+### v1.0.0
+
+- Initial release with auto-accept, CDP integration, background mode, analytics dashboard, and dangerous command blocking.
 
 ---
 
@@ -153,9 +184,10 @@ If AUTO-ACCEPT-MSTRVN saves you time, please give it a ⭐ on GitHub — it help
 ## 🔗 Links
 
 - 📥 [Download Latest Release](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
+- 🟣 [Open VSX Registry](https://open-vsx.org/extension/mstrvn/auto-accept-mstrvn)
 - 🐛 [Report Issues](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/issues)
 - 💬 [Discussions](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/discussions)
 
 ---
 
-**Keywords**: auto accept mstrvn, auto accept agent, cursor auto accept, antigravity auto accept, vscode auto accept, ai agent automation, cursor extension, antigravity extension, auto accept vsix, free auto accept, coding agent automation, ai coding assistant, cursor ai, antigravity tools, vscode extension, auto approve agent, hands-free coding, ai workflow automation, mstrvn dev, auto-accept-mstrvn
+**Keywords**: auto accept mstrvn, auto accept agent, cursor auto accept, antigravity auto accept, vscode auto accept, ai agent automation, cursor extension, antigravity extension, auto accept vsix, free auto accept, coding agent automation, ai coding assistant, cursor ai, antigravity tools, vscode extension, auto approve agent, hands-free coding, ai workflow automation, mstrvn dev, auto-accept-mstrvn, open vsx
