@@ -37,7 +37,7 @@ const BACKGROUND_DONT_SHOW_KEY = 'auto-accept-background-dont-show';
 const BACKGROUND_MODE_KEY = 'auto-accept-background-mode';
 const LAST_UPDATE_CHECK_KEY = 'auto-accept-last-update-check';
 const DISMISSED_VERSION_KEY = 'auto-accept-dismissed-version';
-const CURRENT_VERSION = '1.0.2';
+const CURRENT_VERSION = '1.0.3';
 
 let pollTimer;
 let statsCollectionTimer;
@@ -683,7 +683,7 @@ async function checkForUpdates(context) {
             const options = {
                 hostname: 'api.github.com',
                 path: '/repos/mstrvndev/auto-accept-agent-antigravity-free/releases/latest',
-                headers: { 'User-Agent': 'auto-accept-mstrvn' }
+                headers: { 'User-Agent': 'auto-accept-mstrvndev' }
             };
             https.get(options, (res) => {
                 let data = '';
@@ -715,7 +715,7 @@ async function checkForUpdates(context) {
             const body = releaseData.body ? releaseData.body.substring(0, 200) : '';
 
             const selection = await vscode.window.showInformationMessage(
-                `🚀 AUTO-ACCEPT-MSTRVN update available: ${releaseName}${body ? ' — ' + body : ''}`,
+                `🚀 AUTO-ACCEPT-MSTRVNDEV update available: ${releaseName}${body ? ' — ' + body : ''}`,
                 'Download Update',
                 'View Release',
                 'Dismiss'

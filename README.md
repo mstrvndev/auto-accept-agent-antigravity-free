@@ -1,14 +1,14 @@
-# 🚀 AUTO-ACCEPT-MSTRVN — Free Edition
+# 🚀 AUTO-ACCEPT-MSTRVNDEV — Free Edition
 
-[![Version](https://img.shields.io/badge/version-1.0.1-blue?style=for-the-badge)](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
-[![Open VSX](https://img.shields.io/open-vsx/v/mstrvn/auto-accept-mstrvn?style=for-the-badge&label=Open%20VSX&color=purple)](https://open-vsx.org/extension/mstrvn/auto-accept-mstrvn)
+[![Version](https://img.shields.io/badge/version-1.0.3-blue?style=for-the-badge)](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
+[![Open VSX](https://img.shields.io/open-vsx/v/mstrvndev/auto-accept-mstrvndev?style=for-the-badge&label=Open%20VSX&color=purple)](https://open-vsx.org/extension/mstrvndev/auto-accept-mstrvndev)
 [![VS Code](https://img.shields.io/badge/VS%20Code-%3E%3D1.75.0-007ACC?style=for-the-badge&logo=visual-studio-code)](https://code.visualstudio.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Downloads](https://img.shields.io/github/downloads/mstrvndev/auto-accept-agent-antigravity-free/total?style=for-the-badge&color=orange)](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
 
 > **Automatically accept AI agent suggestions in Cursor, Antigravity & VS Code — hands-free coding at lightning speed.**
 
-AUTO-ACCEPT-MSTRVN is a powerful **VS Code / Cursor / Antigravity extension** that automates the "Accept" workflow when working with AI coding agents. Stop clicking manually — let the agent run autonomously while you focus on what matters.
+AUTO-ACCEPT-MSTRVNDEV is a powerful **VS Code / Cursor / Antigravity extension** that automates the "Accept" workflow when working with AI coding agents. Stop clicking manually — let the agent run autonomously while you focus on what matters.
 
 ---
 
@@ -35,10 +35,10 @@ AUTO-ACCEPT-MSTRVN is a powerful **VS Code / Cursor / Antigravity extension** th
 ### Option 1 — Open VSX Registry (Recommended for Antigravity)
 
 1. Open your IDE's Extensions panel.
-2. Search for **`auto-accept-mstrvn`**.
+2. Search for **`auto-accept-mstrvndev`**.
 3. Click **Install**.
 
-Or install directly from: **[open-vsx.org/extension/mstrvn/auto-accept-mstrvn](https://open-vsx.org/extension/mstrvn/auto-accept-mstrvn)**
+Or install directly from: **[open-vsx.org/extension/mstrvndev/auto-accept-mstrvndev](https://open-vsx.org/extension/mstrvndev/auto-accept-mstrvndev)**
 
 ### Option 2 — Pre-built VSIX
 
@@ -84,7 +84,7 @@ Then install the generated `.vsix` via `Extensions: Install from VSIX...`.
 
 ## 🛡️ Safety — Dangerous Command Blocking
 
-AUTO-ACCEPT-MSTRVN ships with a built-in blocklist of dangerous terminal commands to keep you safe:
+AUTO-ACCEPT-MSTRVNDEV ships with a built-in blocklist of dangerous terminal commands to keep you safe:
 
 - `rm -rf /`, `rm -rf ~`, `rm -rf *`
 - `format c:`, `del /f /s /q`, `rmdir /s /q`
@@ -97,7 +97,7 @@ You can customize this list in the settings panel.
 ## 🏗️ Architecture
 
 ```
-auto-accept-mstrvn/
+auto-accept-mstrvndev/
 ├── extension.js              # Main VS Code extension entry
 ├── settings-panel.js         # Settings webview UI
 ├── dist/                     # Compiled output (bundled by esbuild)
@@ -136,6 +136,15 @@ auto-accept-mstrvn/
 
 ## 📋 Changelog
 
+### v1.0.3
+
+- **Added "Continue" button auto-click** — Now detects and clicks the "Continue" button (e.g. `Alt+Enter` prompt) automatically.
+- **Fixed publisher namespace** — Changed publisher from `mstrvn` to `mstrvndev` to match the verified Open VSX publisher account, eliminating the "not a verified publisher" warning.
+
+### v1.0.2
+
+- Minor internal updates.
+
 ### v1.0.1
 
 - **Removed auto-restart of IDE** — The extension no longer force-quits and relaunches your IDE. Instead, it shows a toast notification prompting you to restart manually.
@@ -171,23 +180,23 @@ auto-accept-mstrvn/
 
 This project is licensed under the [MIT License](LICENSE).
 
-Copyright (c) 2026 [mstrvn.dev](https://github.com/mstrvndev)
+Copyright (c) 2026 [mstrvndev](https://github.com/mstrvndev)
 
 ---
 
 ## ⭐ Star This Repo
 
-If AUTO-ACCEPT-MSTRVN saves you time, please give it a ⭐ on GitHub — it helps others discover this tool!
+If AUTO-ACCEPT-MSTRVNDEV saves you time, please give it a ⭐ on GitHub — it helps others discover this tool!
 
 ---
 
 ## 🔗 Links
 
 - 📥 [Download Latest Release](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/releases)
-- 🟣 [Open VSX Registry](https://open-vsx.org/extension/mstrvn/auto-accept-mstrvn)
+- 🟣 [Open VSX Registry](https://open-vsx.org/extension/mstrvndev/auto-accept-mstrvndev)
 - 🐛 [Report Issues](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/issues)
 - 💬 [Discussions](https://github.com/mstrvndev/auto-accept-agent-antigravity-free/discussions)
 
 ---
 
-**Keywords**: auto accept mstrvn, auto accept agent, cursor auto accept, antigravity auto accept, vscode auto accept, ai agent automation, cursor extension, antigravity extension, auto accept vsix, free auto accept, coding agent automation, ai coding assistant, cursor ai, antigravity tools, vscode extension, auto approve agent, hands-free coding, ai workflow automation, mstrvn dev, auto-accept-mstrvn, open vsx
+**Keywords**: auto accept mstrvndev, auto accept agent, cursor auto accept, antigravity auto accept, vscode auto accept, ai agent automation, cursor extension, antigravity extension, auto accept vsix, free auto accept, coding agent automation, ai coding assistant, cursor ai, antigravity tools, vscode extension, auto approve agent, hands-free coding, ai workflow automation, mstrvndev, auto-accept-mstrvndev, open vsx

@@ -47,6 +47,7 @@ function isAcceptButton(el) {
         { pattern: 'retry', exact: true },
         { pattern: 'try again', exact: false },
         { pattern: 'confirm', exact: false },
+        { pattern: 'continue', exact: true },
         { pattern: 'Allow Once', exact: true },
         { pattern: 'always allow', exact: false }
     ];

@@ -102,7 +102,7 @@ class Relauncher {
         const scriptPath = path.join(tmpDir, 'auto-accept-cdp-setup.ps1');
 
         const script = `
-# AUTO-ACCEPT-MSTRVN — Automatic CDP Setup
+# AUTO-ACCEPT-MSTRVNDEV — Automatic CDP Setup
 # This script runs automatically — no user action needed
 
 $ErrorActionPreference = "SilentlyContinue"
@@ -277,7 +277,7 @@ exit 0
         const scriptPath = path.join(tmpDir, 'auto-accept-cdp-setup.sh');
 
         const script = `#!/bin/bash
-# AUTO-ACCEPT-MSTRVN — Automatic CDP Setup for macOS
+# AUTO-ACCEPT-MSTRVNDEV — Automatic CDP Setup for macOS
 
 IDE_NAME="${ideName}"
 
@@ -370,7 +370,7 @@ exit 0
         const ideNameLower = ideName.toLowerCase();
 
         const script = `#!/bin/bash
-# AUTO-ACCEPT-MSTRVN — Automatic CDP Setup for Linux
+# AUTO-ACCEPT-MSTRVNDEV — Automatic CDP Setup for Linux
 
 IDE_NAME="${ideName}"
 IDE_NAME_LOWER="${ideNameLower}"

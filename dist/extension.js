@@ -292,7 +292,7 @@ var require_settings_panel = __commonJS({
         <body>
             <div class="container">
                 <div class="header">
-                    <h1>AUTO-ACCEPT-MSTRVN <span class="free-badge">FREE</span></h1>
+                    <h1>AUTO-ACCEPT-MSTRVNDEV <span class="free-badge">FREE</span></h1>
                     <div class="subtitle">Multi-agent automation for Antigravity, Cursor & VS Code \u2014 All features unlocked</div>
                 </div>
 
@@ -355,7 +355,7 @@ var require_settings_panel = __commonJS({
                 </div>
 
                 <div style="text-align: center; opacity: 0.15; font-size: 10px; padding: 20px 0; letter-spacing: 1px;">
-                    mstrvn.dev \u2014 All features free, forever.
+                    mstrvndev \u2014 All features free, forever.
                 </div>
             </div>
 
@@ -4362,7 +4362,7 @@ ${detail}` : message,
         const tmpDir = os.tmpdir();
         const scriptPath = path2.join(tmpDir, "auto-accept-cdp-setup.ps1");
         const script = `
-# AUTO-ACCEPT-MSTRVN \u2014 Automatic CDP Setup
+# AUTO-ACCEPT-MSTRVNDEV \u2014 Automatic CDP Setup
 # This script runs automatically \u2014 no user action needed
 
 $ErrorActionPreference = "SilentlyContinue"
@@ -4521,7 +4521,7 @@ exit 0
         const tmpDir = os.tmpdir();
         const scriptPath = path2.join(tmpDir, "auto-accept-cdp-setup.sh");
         const script = `#!/bin/bash
-# AUTO-ACCEPT-MSTRVN \u2014 Automatic CDP Setup for macOS
+# AUTO-ACCEPT-MSTRVNDEV \u2014 Automatic CDP Setup for macOS
 
 IDE_NAME="${ideName}"
 
@@ -4605,7 +4605,7 @@ exit 0
         const scriptPath = path2.join(tmpDir, "auto-accept-cdp-setup.sh");
         const ideNameLower = ideName.toLowerCase();
         const script = `#!/bin/bash
-# AUTO-ACCEPT-MSTRVN \u2014 Automatic CDP Setup for Linux
+# AUTO-ACCEPT-MSTRVNDEV \u2014 Automatic CDP Setup for Linux
 
 IDE_NAME="${ideName}"
 IDE_NAME_LOWER="${ideNameLower}"
@@ -4710,7 +4710,7 @@ var BACKGROUND_DONT_SHOW_KEY = "auto-accept-background-dont-show";
 var BACKGROUND_MODE_KEY = "auto-accept-background-mode";
 var LAST_UPDATE_CHECK_KEY = "auto-accept-last-update-check";
 var DISMISSED_VERSION_KEY = "auto-accept-dismissed-version";
-var CURRENT_VERSION = "1.0.1";
+var CURRENT_VERSION = "1.0.3";
 var pollTimer;
 var statsCollectionTimer;
 var statusBarItem;
@@ -5236,7 +5236,7 @@ async function checkForUpdates(context) {
       const options = {
         hostname: "api.github.com",
         path: "/repos/mstrvndev/auto-accept-agent-antigravity-free/releases/latest",
-        headers: { "User-Agent": "auto-accept-mstrvn" }
+        headers: { "User-Agent": "auto-accept-mstrvndev" }
       };
       https.get(options, (res) => {
         let data = "";
@@ -5265,7 +5265,7 @@ async function checkForUpdates(context) {
       }
       const body = releaseData.body ? releaseData.body.substring(0, 200) : "";
       const selection = await vscode.window.showInformationMessage(
-        `\u{1F680} AUTO-ACCEPT-MSTRVN update available: ${releaseName}${body ? " \u2014 " + body : ""}`,
+        `\u{1F680} AUTO-ACCEPT-MSTRVNDEV update available: ${releaseName}${body ? " \u2014 " + body : ""}`,
         "Download Update",
         "View Release",
         "Dismiss"

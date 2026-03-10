@@ -303,7 +303,7 @@ class SettingsPanel {
         <body>
             <div class="container">
                 <div class="header">
-                    <h1>AUTO-ACCEPT-MSTRVN <span class="free-badge">FREE</span></h1>
+                    <h1>AUTO-ACCEPT-MSTRVNDEV <span class="free-badge">FREE</span></h1>
                     <div class="subtitle">Multi-agent automation for Antigravity, Cursor & VS Code — All features unlocked</div>
                 </div>
 
@@ -366,7 +366,7 @@ class SettingsPanel {
                 </div>
 
                 <div style="text-align: center; opacity: 0.15; font-size: 10px; padding: 20px 0; letter-spacing: 1px;">
-                    mstrvn.dev — All features free, forever.
+                    mstrvndev — All features free, forever.
                 </div>
             </div>
 

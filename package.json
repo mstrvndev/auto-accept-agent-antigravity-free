@@ -1,9 +1,9 @@
 {
-    "name": "auto-accept-mstrvn",
-    "displayName": "AUTO-ACCEPT-MSTRVN",
-    "description": "AUTO-ACCEPT-MSTRVN: Automated AI agent accept workflow for Cursor, Antigravity and VS Code.",
-    "version": "1.0.2",
-    "publisher": "mstrvn",
+    "name": "auto-accept-mstrvndev",
+    "displayName": "AUTO-ACCEPT-MSTRVNDEV",
+    "description": "AUTO-ACCEPT-MSTRVNDEV: Automated AI agent accept workflow for Cursor, Antigravity and VS Code.",
+    "version": "1.0.3",
+    "publisher": "mstrvndev",
     "icon": "media/icon.png",
     "repository": {
         "type": "git",
