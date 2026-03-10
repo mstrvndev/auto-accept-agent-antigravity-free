@@ -72,6 +72,16 @@ Then install the generated `.vsix` via `Extensions: Install from VSIX...`.
 
 > **💡 Tip:** You no longer need to run any external PowerShell script. The extension handles the CDP setup automatically on first use.
 
+### ⚠️ Troubleshooting — Can't Toggle On?
+
+If the extension fails to toggle on (CDP not detected), you can manually enable the debug port by running the setup script in PowerShell:
+
+```powershell
+pwsh -ExecutionPolicy Bypass -File "C:\Users\<YourUsername>\Downloads\enable_antigravity_debug.ps1"
+```
+
+> Replace `<YourUsername>` with your actual Windows username. This script patches your Antigravity shortcuts to include `--remote-debugging-port=9000`. After running it, restart Antigravity and toggle the extension on again.
+
 ### Commands
 
 | Command | Description |
