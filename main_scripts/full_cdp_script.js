@@ -518,7 +518,7 @@
      * The command text is in a PRE block that's a previous sibling of the grandparent.
      */
     function findNearbyCommandText(el) {
-        const commandSelectors = ['pre', 'code', 'pre code'];
+        const commandSelectors = ['pre', 'code', 'pre code', 'textarea[aria-label="Edit permission target"]'];
         let commandText = '';
 
         // Strategy 1: Walk up to find parent containers, then search their previous siblings
@@ -546,8 +546,9 @@
                 for (const selector of commandSelectors) {
                     const codeElements = sibling.querySelectorAll(selector);
                     for (const codeEl of codeElements) {
-                        if (codeEl && codeEl.textContent) {
-                            const text = codeEl.textContent.trim();
+                        const content = codeEl.tagName === 'TEXTAREA' ? codeEl.value : codeEl.textContent;
+                        if (codeEl && content) {
+                            const text = content.trim();
                             if (text.length > 0 && text.length < 5000) {
                                 commandText += ' ' + text;
                                 log(`[BannedCmd] Found <${selector}> in sibling at depth ${depth}: "${text.substring(0, 100)}..."`);
@@ -666,7 +667,7 @@
     function isAcceptButton(el) {
         const text = (el.textContent || "").trim().toLowerCase();
         if (text.length === 0 || text.length > 50) return false;
-        const patterns = ['accept', 'run', 'retry', 'apply', 'execute', 'confirm', 'continue', 'allow once', 'always allow', 'allow'];
+        const patterns = ['accept', 'run', 'retry', 'apply', 'execute', 'confirm', 'continue', 'allow once', 'always allow', 'allow', 'submit'];
         const rejects = ['skip', 'reject', 'cancel', 'close', 'refine', 'always run'];
         if (rejects.some(r => text.includes(r))) return false;
         if (!patterns.some(p => text.includes(p))) return false;
@@ -740,7 +741,45 @@
         for (const el of uniqueFound) {
             if (isAcceptButton(el)) {
                 const buttonText = (el.textContent || "").trim();
+                const lowerBtnText = buttonText.toLowerCase();
                 log(`Clicking: "${buttonText}"`);
+
+                if (lowerBtnText.includes('submit')) {
+                    const container = el.closest('.relative') || el.closest('.bg-ide-editor-background') || (el.parentElement ? el.parentElement.parentElement : null);
+                    if (container) {
+                        const radiogroup = container.querySelector('[role="radiogroup"]');
+                        const textarea = container.querySelector('textarea[aria-label="Edit permission target"]');
+                        if (radiogroup && textarea) {
+                            const cmdText = textarea.value || textarea.textContent || "";
+                            const lowerCmd = cmdText.toLowerCase();
+
+                            // Path combinations that are dangerous when combined with remove commands
+                            const isWiping = /(^|\s)(rm(-rf)?|remove-item|del|rd|rmdir)(\s+-r(ecurse)?|-force|-s)?\s+.*/i.test(cmdText);
+                            const hasImportantPath = lowerCmd.includes('antigravity\\\\scratch') || lowerCmd.includes('antigravity/scratch');
+                            
+                            // Check if standard banned command logic applies
+                            const isBanned = isCommandBanned(cmdText);
+
+                            if ((isWiping && hasImportantPath) || isBanned) {
+                                log(`[SAFETY] Detected dangerous command or banned: ${cmdText}`);
+                                const noRadio = radiogroup.querySelector('input[value="__write_in__"]');
+                                if (noRadio) {
+                                    noRadio.click();
+                                    const noLabel = noRadio.closest('label');
+                                    if(noLabel) noLabel.click();
+                                }
+                            } else {
+                                const yesRadio = radiogroup.querySelector('input[value="1"]');
+                                if (yesRadio) {
+                                    yesRadio.click();
+                                    const yesLabel = yesRadio.closest('label');
+                                    if(yesLabel) yesLabel.click();
+                                }
+                            }
+                            await new Promise(r => setTimeout(r, 100)); // small delay for UI
+                        }
+                    }
+                }
 
                 // Dispatch click
                 el.dispatchEvent(new MouseEvent('click', { view: window, bubbles: true, cancelable: true }));
@@ -1028,3 +1067,4 @@
 
     log("Core Bundle Initialized.", true);
 })();
+

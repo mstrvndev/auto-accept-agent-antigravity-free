@@ -49,6 +49,7 @@ function isAcceptButton(el) {
         { pattern: 'confirm', exact: false },
         { pattern: 'continue', exact: true },
         { pattern: 'Allow Once', exact: true },
+        { pattern: 'submit', exact: true },
         { pattern: 'always allow', exact: false }
     ];
 
@@ -151,6 +152,43 @@ export function click(targetSelectors, panelSelector) {
     for (const el of uniqueElements) {
         // If it's an accept button, click it
         if (isAcceptButton(el)) {
+            const buttonText = (el.textContent || "").trim().toLowerCase();
+            if (buttonText === 'submit') {
+                const container = el.closest('.relative') || el.closest('.bg-ide-editor-background') || (el.parentElement ? el.parentElement.parentElement : null);
+                if (container) {
+                    const radiogroup = container.querySelector('[role="radiogroup"]');
+                    const textarea = container.querySelector('textarea[aria-label="Edit permission target"]');
+                    if (radiogroup && textarea) {
+                        const cmdText = textarea.value || textarea.textContent || "";
+                        const lowerCmd = cmdText.toLowerCase();
+
+                        // Path combinations that are dangerous when combined with remove commands
+                        const isWiping = /(^|\s)(rm(-rf)?|remove-item|del|rd|rmdir)(\s+-r(ecurse)?|-force|-s)?\s+.*/i.test(cmdText);
+                        const hasImportantPath = lowerCmd.includes('antigravity\\\\scratch') || lowerCmd.includes('antigravity/scratch');
+                        
+                        // Wait, auto_accept.js doesn't have isCommandBanned. We will check it with the above generic regex.
+
+                        if (isWiping && hasImportantPath) {
+                            const noRadio = radiogroup.querySelector('input[value="__write_in__"]');
+                            if (noRadio) {
+                                noRadio.click();
+                                const noLabel = noRadio.closest('label');
+                                if(noLabel) noLabel.click();
+                            }
+                        } else {
+                            const yesRadio = radiogroup.querySelector('input[value="1"]');
+                            if (yesRadio) {
+                                yesRadio.click();
+                                const yesLabel = yesRadio.closest('label');
+                                if(yesLabel) yesLabel.click();
+                            }
+                        }
+                        // wait is not available here since it's not async, but we can't await easily. 
+                        // Wait, auto_accept.js `click` is not marked async. 
+                        // We will just do the clicks sequentially.
+                    }
+                }
+            }
             el.click();
             clickCount++;
         }
